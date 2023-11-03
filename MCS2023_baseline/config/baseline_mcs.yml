@@ -1,0 +1,63 @@
+exp_name: "baseline_mcs"
+outdir: "./experiments/"
+
+num_gpu: 1
+
+dataset:
+  train_prefix: ".../Product10K/train/"
+  train_list: ".../Product10K/train.csv"
+  val_prefix: ".../Product10K/test/"
+  val_list: ".../Product10K/test_kaggletest.csv"
+  seed: 42
+  num_of_classes: 9691
+  input_size: 224
+  batch_size: 8
+  augmentations: "imagenet"
+  augmentations_valid: "default"
+  num_workers: 24
+
+model:
+  arch: "ViT-H-14"
+
+train:
+  optimizer: "AdamW"
+  learning_rate: 0.1
+  momentum: 0.9
+  weight_decay: 0.0001
+  lr_schedule:
+    name: "StepLR"
+    step_size: 30
+    gamma: 0.1
+  n_epoch: 50
+  label_smoothing: false
+  eps: 0.01
+  freq_vis: 500
+
+CFG:
+  model_name: "ViT-L-14-336"
+  model_data: "openai"
+  samples_per_class: 50
+  n_classes: 0
+  min_samples: 4
+  image_size: 336
+  hidden_layer: 1024
+  seed: 5
+  workers: 12
+  train_batch_size: 16
+  valid_batch_size: 32
+  emb_size: 512
+  vit_bb_lr: { "10": 1.25e-6, "20": 2.5e-6, "26": 5e-6, "32": 10e-6 }
+  vit_bb_wd: 1e-3
+  hd_lr: 3e-4
+  hd_wd: 1e-5
+  autocast: True
+  n_warmup_steps: 1000
+  n_epochs: 2
+  device: torch.device('cuda')
+  s: 30.
+  m: .45
+  m_min: .05
+  acc_steps: 4
+  global_step: 0
+  reduce_lr: 0.1
+  crit: "ce"
